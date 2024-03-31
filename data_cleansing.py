@@ -52,13 +52,16 @@ def team_analyzer():
     filtered_df = results_copy.query(f"home_team  == {team} | away_team == {team}")
     winnings    = results_copy.query(f"(home_team == {team} & is_home_win==True)  | (away_team == {team} & is_away_win==True)").shape[0]
     losing      =results_copy.query(f"(home_team  == {team} & is_home_win==False) | (away_team == {team} & is_away_win==False)").shape[0]
+    total_games = winnings + losing if winnings + losing > 0 else 1  # Avoid division by zero
     print(filtered_df)
     print(f"{team} has {winnings} winnings")
     print(f"{team} has {losing} losing")
-    print(f"the winning percentage of {team} is " + str((winnings/(winnings+losing))*100))
-# TypeError: unsupported operand type(s) for |: 'str' and 'str'
+    print(f"the winning percentage of {team} is " + f"{(winnings/(total_games))*100:.3f}%")
+
 
 team_analyzer()
+
+
 
 
 
