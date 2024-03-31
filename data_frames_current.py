@@ -44,7 +44,7 @@ table_chooser()
 
 
 def menu():
-    user_menu=int(input(""" Enter 1 if you want start over\n Enter 2 if you want continue to data cleansing\n Enter 3 to exit: """))
+    user_menu=int(input("""\n Enter 1 if you want start over\n Enter 2 if you want continue to data cleansing\n Enter 3 to exit: """))
 
     if user_menu==1:
         table_chooser() 
