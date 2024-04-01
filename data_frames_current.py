@@ -1,6 +1,19 @@
 # import libraries
 import pandas as pd 
 import sys
+
+
+
+
+def check_populated_pct(df, df_name):
+    print("\n")
+    # each df column 
+    for col in df.columns:
+        # Calculate the percentage of populated values
+        populated_pct = 1 - df[col].isnull().mean()
+        print(f"In table {df_name}: column {col} {populated_pct:.2%} populated")
+
+
 # define the function to print the date regarding the csvs 
 def table_viewer(table_name):
     file = table_name + ".csv"
@@ -12,6 +25,7 @@ def table_viewer(table_name):
     print(f"The number of duplicate rows are: \n {pd.read_csv(file).duplicated().sum()}\n")
     print(f"The number of empty rows(all nulls) are: \n{pd.read_csv(file).isna().all(axis=1).sum()}")  
 
+    check_populated_pct(pd.read_csv(file), table_name)
 
 # for each input from the user will have the name of the table in order to print the details of it to the user
 user_input_dict={1:"all",2:"goalscorers",3:"results",4:"shootouts"}
