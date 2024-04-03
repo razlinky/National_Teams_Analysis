@@ -1,0 +1,79 @@
+national team first analysis : 
+
+backround :::::::::::::::::::::::::::::::::::: 
+
+we have 3 df  of national teams 
+goalscorers
+results
+shootouts
+
+stage 1 : 
+go to stage 1 and play*******
+
+
+a menu will open 
+the user will choose which df he wants to see(or all of them) and he will get a short   description such as : 
+
+1.show first rows.
+
+2.how many rows and column the df has.
+
+3.types of the columns. 
+
+4.The number of missing values in each columns.
+
+5.The number of duplicate rows.
+
+6.the number of empty rows.
+
+7.column population in %
+
+beacsue of 7 i removed shootout df because the main puropse in this df is who is the scorer and most of the main purpose is not  populated (column first_shooter 34.06% populated)
+
+
+
+if the user will press 2 he will continue to stage 2 .
+
+
+================================================================================================================
+stage 2 : 
+
+1.cleansing will start.
+  remove cuplidate rows
+  drop empty rows
+  and creating new boolean columns for is_home_win/is_away_win (win is True)
+  as mentioned below i decided not to work with shootouts df because  lack of data.
+3.after cleansing and add new columns,the user will choose how many **best teams**  he wants to see  (max of 5)
+4.now the process will start to calculate :
+ first df  results_copy  will be filtered only is_home_team=True
+ second df results_copy  will be filtered only is_away_team=True
+
+then i did group by team in order to see how many wins each team has home and away.
+then i did inner merge on  team and sum home win+ away win 
+now i will get team and number of total winnings.
+(the head will be the input from the user max of 5 ) 
+
+5.plot for total wins for each team (in parallel we have printing of team,winshome,winsaway,totalwins)
+6.plot for away wins for each team .
+
+7. the new df that iv'e created ,top_teams_chooser(team,total number of winnings)
+will be merged with goalscorers df  by inner on team(that the user choose ) , and that in order to bring the team(that the user choose )   and minute of the goal .
+
+8. plot_goal_distribution_per_min(in parallel will have printing of team,minute and below mentiond how many rows)
+9.median plot of goal per team (in parallel will have a printing of mean,std,median and etc')
+
+
+thanks !!
+razlinkovski@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
