@@ -1,13 +1,29 @@
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------IMPORT LIBRARIES -------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np  # Import NumPy
 from seaborn import kdeplot
 import sys
 
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------CREATE DATA FRAMES FROM CSV ---------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 goalscorers= pd.read_csv("goalscorers.csv")
 results= pd.read_csv("results.csv")
 shootouts= pd.read_csv("shootouts.csv")
 
+
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------DROP DUPLICATES AND EMPTY ROWS-------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------
 def drop_duplicates_empty_rows(df):
     df_copy = df.copy() 
@@ -20,9 +36,13 @@ shootouts = drop_duplicates_empty_rows(shootouts)
 # -------------------------------------------------------------------------------------------------------------------------
 
 
-# -------------------------------------------------------------------------------------------------------------------------
-# from functions_data_frames import results_df_with_boolean_columns
 
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------CREATE BOOLEAN COLUMN FOR HOME WIN(TRUE) AND AWAY WIN(TRUE)--------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 def results_df_with_boolean_columns():
     results    ['is_home_win']                  = results    ['home_score'] > results['away_score']
     results    ['is_away_win']                  = results    ['home_score'] < results['away_score']
@@ -30,10 +50,14 @@ def results_df_with_boolean_columns():
     return results
 
 
-# -------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 # -------------------------------------------------------------------------------------------------------------------------
-
+# ------------THE USER CHOOSE HOW MANY TEAMS HE WANTS TO SEE (MAX 5)-------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 while True:
     num_of_teams = int(input("How many teams do you want to see (between 1 and 5)? "))
     if 1 <= num_of_teams <= 5:
@@ -42,15 +66,21 @@ while True:
         print("Invalid input. Please enter a number between 1 and 5.")
 
 print(f"Processing data for {num_of_teams} teams.")
-# -------------------------------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
 # -------------------------------------------------------------------------------------------------------------------------
-# from functions_data_frames import top_team_chooser
+# ------------FOR EACH TEAM WILL SUM AWAY WINS,HOME WINS,TOTAL WINS AND TOTAL WINS ----------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
+
 def top_team_chooser():
     specific_value = True
-    # true is winning !!!!
-    # Filter for the specific value in 'is_home_win' before grouping
+    # true is winning !
+    # Filter for the specific value in 'is_home_win' before grouping=TRUE WINS 
     filtered_df_home = results_df_with_boolean_columns()[results_df_with_boolean_columns()['is_home_win'] == specific_value]
     filtered_df_away = results_df_with_boolean_columns()[results_df_with_boolean_columns()['is_away_win'] == specific_value]
     # Group by 'home_team' and count occurrences(bollean as i added before) and rename the column to team 
@@ -74,6 +104,13 @@ print(top_team_chooser())
 # -------------------------------------------------------------------------------------------------------------------------
 
 
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------THE USER CHOOSE MAX OF 5 TEAMS ,WILL DO INNER JOIN TO BRING ALL THE GOAL MINUTES FROM GOALSCORERS DF---------
+              # THEN WILL GET A DF WITH TEAM AND MIN OF GOAL
+# -------------------------------------------------------------------------------------------------------------------------
 def team_goal_per_min():
 
     merged_df = top_team_chooser().merge(goalscorers, how='inner', on='team')
@@ -88,17 +125,16 @@ def team_goal_per_min():
 
 team_goal_per_min()
 
-# ----------------------------------------------add new column minutes 0-120 into 4 groups 
+
+
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# -----------DIVIDE 120 MINUTES INTO 4 GROUPS,NOW THE DF WILL BE TEAM,MINUTE OF THE GOAL,AND GROUP MIN OF THE GOAL --------
+# -------------------------------------------------------------------------------------------------------------------------
 def team_goal_per_min_with_group_column():
-  """
-  Adds a new column 'group' to the DataFrame 'df' that categorizes minutes into 4 groups (0-30, 31-60, 61-90, 91-120).
 
-  Args:
-      df (pandas.DataFrame): The DataFrame containing 'team' and 'minute' columns.
-
-  Returns:
-      pandas.DataFrame: The DataFrame with the added 'group' column.
-  """
   df=team_goal_per_min()
   # Define group boundaries based on minute range (0-120)
   group_boundaries = [0, 30, 60, 90, 120]
@@ -127,7 +163,9 @@ team_goal_per_min_with_group_column()
 
 
 
-# -----------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------CREATE A PLOT OF TOTAL WINS ---------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 def plot_total_wins():
   """Creates a scatter plot with team names on the x-axis and wins away on the y-axis.
 
@@ -156,16 +194,12 @@ plot_total_wins()
 
 
 
-# away wins for top teams plot-------------------------------------------------
 
-
-
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------CREATE A PLOT FOR AWAY WINS ---------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 def plot_team_winsaway():
-  """Creates a scatter plot with team names on the x-axis and wins away on the y-axis.
 
-  Args:
-      df (pandas.DataFrame): The DataFrame containing 'team', 'winshome', 'winsaway', and 'total_wins' columns.
-  """
   df=top_team_chooser()
   # Extract data for plotting
   team_names =df['team'].to_numpy()
@@ -190,6 +224,13 @@ plot_team_winsaway()
 
 
 
+
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------CREATE A PLOT FOR GOALS AND TEAM(MINUTES OF GOAL DEVIDED INTO 4 GROUP FOR EXAMPLE MIN 120 IS GROUP 4 ) ------
+# -------------------------------------------------------------------------------------------------------------------------
 def plot_grouped_minute_per_Team():
   """Creates a grouped bar chart to visualize teams by group.
 
@@ -216,7 +257,9 @@ plot_grouped_minute_per_Team()
 
 
 
-
+# -------------------------------------------------------------------------------------------------------------------------
+# ------------THE USER WILL CHOOSE IF START OVER OR EXIT ------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------
 def menu2():
     user_menu=int(input("""\n Enter 1 if you want start over\n Enter 2 if you want  to exit: """))
     if user_menu==1:
