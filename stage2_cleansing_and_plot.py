@@ -31,8 +31,8 @@ def drop_duplicates_empty_rows(df):
     return df_clean
 
 goalscorers = drop_duplicates_empty_rows(goalscorers)
-results = drop_duplicates_empty_rows(results)
-shootouts = drop_duplicates_empty_rows(shootouts)
+results     = drop_duplicates_empty_rows(results)
+shootouts   = drop_duplicates_empty_rows(shootouts)
 # -------------------------------------------------------------------------------------------------------------------------
 
 
@@ -43,11 +43,11 @@ shootouts = drop_duplicates_empty_rows(shootouts)
 # -------------------------------------------------------------------------------------------------------------------------
 # ------------CREATE BOOLEAN COLUMN FOR HOME WIN(TRUE) AND AWAY WIN(TRUE)--------------------------------------------------
 # -------------------------------------------------------------------------------------------------------------------------
-def results_df_with_boolean_columns():
-    results    ['is_home_win']                  = results    ['home_score'] > results['away_score']
-    results    ['is_away_win']                  = results    ['home_score'] < results['away_score']
+def results_df_with_boolean_columns(df):
+    df    ['is_home_win']                  = df    ['home_score'] > df['away_score']
+    df    ['is_away_win']                  = df    ['home_score'] < df['away_score']
 
-    return results
+    return df
 
 
 
@@ -81,8 +81,8 @@ def top_team_chooser():
     specific_value = True
     # true is winning !
     # Filter for the specific value in 'is_home_win' before grouping=TRUE WINS 
-    filtered_df_home = results_df_with_boolean_columns()[results_df_with_boolean_columns()['is_home_win'] == specific_value]
-    filtered_df_away = results_df_with_boolean_columns()[results_df_with_boolean_columns()['is_away_win'] == specific_value]
+    filtered_df_home = results_df_with_boolean_columns(results)[results_df_with_boolean_columns(results)['is_home_win'] == specific_value]
+    filtered_df_away = results_df_with_boolean_columns(results)[results_df_with_boolean_columns(results)['is_away_win'] == specific_value]
     # Group by 'home_team' and count occurrences(bollean as i added before) and rename the column to team 
     home_win_count = filtered_df_home.groupby('home_team').size().to_frame(name="Winshome").rename_axis('team')
     away_win_count = filtered_df_away.groupby('away_team' ).size().to_frame(name="Winsaway").rename_axis('team')
